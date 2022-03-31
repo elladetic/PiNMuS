@@ -1,7 +1,11 @@
+
+
 %random isprobavanje 
 A_proba =  [2 1 -1; -3 -1 2; -2 1 2];
 b_proba =  [8;-11;-3];
 %ovo radi skroz okej, rjesenje je 2 3 -1 
+
+format long e;
 
 %onaj zadnji zadatak s primjenom 
 load('podaci.txt');
@@ -10,22 +14,23 @@ x1 = podaci(:,1); %težina
 x2 = podaci(:,2); %dob
 y = podaci(:,3); %izmjereni krvi tlak
 
-%ona stvar s oznakama mutava
+%ona stvar s oznakama 
 b=y;
 A = [x0, x1,x2];
+[m,n] = size(A);
 %usporedba QR faktorizacije
 
 %Householderovi 
-[Q_h,R_h] = qr(A);
-A_h = Q_h * R_h;
-r_h = norm(A_h' * (b- y), 2); %jel mi je Ax y? valjda je..?
+[Q_h,R_h] = qr(A, 0);
+x_holder = R_h \ (Q_h.'*b);
+residual_householder = norm(A' * (b- A * x_holder), 2);
 
-%Givensove
-[Q_g,R_g,x] = MNKgivens(A, b);
-A_g = Q_g * R_g;
-r_g = norm(A_g' * (b- y), 2);
+%Givens
+x = MNKgivens(A, b);
+residual_givens = norm(A' * (b- A * x), 2);
 
-if(r_h < r_g)
+
+if(residual_householder < residual_givens)
     disp("Householderovi reflektori su bolji!!");
 else
     disp("Givensove rotacije su bolje!!");
