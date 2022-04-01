@@ -24,9 +24,11 @@ x_solution = P * x_solution ;
 
 %rješavanje problema najmanjih kvadrata koristeći potpuno ortogonalnu
 %dekompoziciju
+
 r = rank(A);  %A je 100 x 100, rank je 99
+
 R(100,100) = 0;
-R11 = R(1:99, 1:99);
+R11 = R(1:99, 1:99)
 R12 = R(1:99, 100);
 R_krnja = [R11'; R12'];
 
@@ -36,21 +38,43 @@ L11 = L(1:99, 1:99)';
 L = transpose(L(1:99,:)); %transpose jer je donje trokutasta
 S = P * Z; %ovdje Z transponirano al nisam ni gore pa nemoram transponirat sad
 
-tmp = [L11 \ Q(:,1:99)'*b; 0];
-x_nk  = S * tmp;
+pr = 
+tmp1 = transpose(Q(:,1:r)) * b;
 
-%relativne greske - usporedba s MNK ranga
-rel_greska1 = norm(x-x_solution,2) / norm(x,2)
-rel_greska2 = norm(x-x_nk,2) / norm(x,2)
+opts.LT=true;
+tmp2 = linsolve(L,tmp1,opts);
 
+%opts.LT=false;
+%pom = L\v;
+
+tmp2(100,1) = 0; %to je onaj zadnji kojeg stavljam na 0 eksplicitno;
+x_final_solution = S * tmp2; %na kraju množim sve sa S
+%x_final_solution = S * L \
+
+%relativne greske
+
+rel_greska2 = norm(x-x_final_solution,2) / norm(x,2)
+
+%usporedba s MNK punog ranga
+[Q_fullrank, R_fullrank] = qr (A,0);
+opts.UT = true 
+x_solution_full_rank = linsolve(R_fullrank, transpose(Q_fullrank) * b);
+opts.UT = false
 %sad gledam matrice R, njihove uvjetovanosti
 
-cond(R,2) %inf
-cond(R_krnja, 2) %ovo je 3
+
+cond(R,2); %9.777787936967692e+18
+cond(R); %2.535025025309796e+30
 %velike razlike u uvjetovanosti
-%male svojstvene vrijednost -> ponašamo se kao da nije punog ranga
 
+%uvjetovanosti krnjih verzija matrica
+cond(R(1:99,1:99),2); %2.996715084073926
+cond(R_fullrank(1:99,1:99),2); %1.267509718450060e+30
+%ovdje je najveća razlika prakticki
 
+norm(A*x_final_solution-b,2); %3.719689206972206e-13
+norm(A*x_solution_full_rank-b,2); %0 
+%nema velikih razlika u greškama
 
 
 
