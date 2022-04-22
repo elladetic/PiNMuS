@@ -38,8 +38,8 @@ end
 
 plot(x_p)
 legend ({"p=14", "p=24","p=36", "p=51", "p=68", "p=78", "p=121"}, "location", "northeast");
-x_opt_best = x_p(:, 3); %OVO NISAM SIGURNA KOJI JE NAJBOLJI!!
-%nije mi jasan bas ovaj graf
+x_opt_best = x_p(:, 3); 
+
 
 %usporedba s regularizacijom lambda naj
 %ovo je bolje od lambda
@@ -53,13 +53,12 @@ tmp = S_lambda\((U_lambda')*b_lambda);
 x_lambda = V_lambda * tmp;
 
 %usporedba:
-norm(x_lambda-x, 2); %0.014884368370384
-norm(A*x_lambda-b,2); %17.835509106442768
-norm(x_opt_best-x, 2); %13.414383736270988
-norm(A*x_opt_best-b,2); %1.082432969871217e+05
+norm(x_lambda-x, 2); 
+norm(A*x_lambda-b,2);
+norm(x_opt_best-x, 2);
+norm(A*x_opt_best-b,2);
 
-% dodaj komentar jel ovo bolje ili ne kad skuzis koji p gledas, ali navodno
-% je bolje kao? 
+
 
 %crtanje L krivulje -> ona mora biti za sve p-ove i provjera jel tocka na rubu
 x_L = [];
@@ -70,18 +69,17 @@ for p = 1:n_A
   V__ = V(:,1:p);
   S__ = S(1:p,1:p);
 
-  pom = U__' * b;
+  pom = U__' * b_new;
   pom1 = S__ \ pom; 
   x_lambda = V__ * pom1;
 
-  errors_L(p) = norm(A*x_lambda-b,2);
+  errors_L(p) = norm(A*x_lambda-b_new,2);
   x_L(p) = norm(x_lambda, 2);
   
 end
 
 
 plot(log10(errors_L),log10(x_L));
-%plot(log10(norm(A*x_opt_best-b,2)), log10(norm(x_opt_best,2)), "*")
-%optimalni mora biti na uglu
+
 
 

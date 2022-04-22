@@ -16,7 +16,7 @@ semilogy(diag(S), "c*");
 %vrijednost reda velicine 10 ^(-2)
 %veliki raspon svojstvenih vrijednosti
 
-b = A * x; %ovdje mi nije sve baš 10000 ?
+b = A * x; 
 size(b); %ovo je 150 x 1
 eta = randn(size(b,1), 1);
 b_new = b + eta; %greške su tek u petoj znamenci

@@ -24,7 +24,7 @@ x_solution = P * x_solution ;
 
 %rješavanje problema najmanjih kvadrata koristeći potpuno ortogonalnu
 %dekompoziciju
-r = rank(A);  %A je 100 x 100, rank je 99
+ %A je 100 x 100, rank je 99
 R(100,100) = 0;
 R11 = R(1:99, 1:99);
 R12 = R(1:99, 100);
