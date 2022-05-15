@@ -1,4 +1,4 @@
-function y = deBoor(x, k, t, n, a) 
+function y = deBoor(x, k, n, t, a) 
 %racunamo vrijednosti kubicnog splajna u danoj točci x
 %obavezno koristi samo jedno 1D polje!
 
@@ -8,7 +8,7 @@ function y = deBoor(x, k, t, n, a)
     for r = 1 : (k-1)
         for j = i : -1 : (i - k + r + 1)
             if (t(j) ~= t(j+k-r)) 
-                omega = (x - t(j)) / ( t(j+k-r) - (j) );
+                omega = (x - t(j)) / ( t(j+k-r) - t(j) );
             else 
                 omega = 0;
             end
